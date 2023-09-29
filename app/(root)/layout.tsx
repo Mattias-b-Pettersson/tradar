@@ -3,10 +3,10 @@ import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
-import Topbar from '@/components/shared/topbar'
-import LeftSidebar from '@/components/shared/LeftSidebar'
-import RightSidebar from '@/components/shared/RightSidebar'
-import Bottombar from '@/components/shared/bottombar'
+import Topbar from '../../components/shared/topbar'
+import LeftSidebar from '../../components/shared/LeftSidebar'
+import RightSidebar from '../../components/shared/RightSidebar'
+import Bottombar from '../../components/shared/bottombar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +26,7 @@ export default function RootLayout({
         <body className={inter.className}> 
           <Topbar /> 
             <main>
+
               <LeftSidebar />
 
               <section className='main-container'>
@@ -35,6 +36,7 @@ export default function RootLayout({
               </section>
 
               <RightSidebar />
+
             </main>
           <Bottombar />
         </body>
