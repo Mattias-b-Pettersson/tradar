@@ -3,8 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 export default function Home() {
   return (
     <main>
-      <UserButton afterSignOutUrl="/"/>
-      <h1>Trådar</h1>
+      <h1 className="head-text text-left">Hem</h1>
     </main>
   )
 }
