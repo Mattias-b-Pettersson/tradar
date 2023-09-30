@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google"
-import { svSE } from "@clerk/localizations/dist/types/sv-SE";
+import { svSE } from "@clerk/localizations";
 
 import "../globals.css"
 
