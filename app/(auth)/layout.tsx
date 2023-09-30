@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google"
+import { svSE } from "@clerk/localizations/dist/types/sv-SE";
 
 import "../globals.css"
 
@@ -12,7 +13,9 @@ const inter = Inter({ subsets: ["latin-ext"] })
 
 export default function RootLayoyt({ children }: { children: React.ReactNode }) {
     return (
-        <ClerkProvider>
+        <ClerkProvider
+            localization={svSE}
+        >
             <html lang="sv" />
             <body className={ `${inter.className} bg-dark-1`}>
                 { children }
