@@ -44,7 +44,7 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
     const skipAmount = pageSize * (pageNumber - 1);
 
     // fetch threads that have no parents
-    const postQuery = Thread.find({parent: {$in: [null, undefined]}  })
+    const postQuery = Thread.find({parentId: {$in: [null, undefined]}  })
     .sort({createdAt: "desc"})
     .skip(skipAmount)
     .limit(pageSize)
@@ -58,7 +58,7 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
         }
     })
 
-    const totalPostsCount = await Thread.countDocuments({ parent: {$in: [null, undefined]} });
+    const totalPostsCount = await Thread.countDocuments({ parentId: {$in: [null, undefined]} });
 
     const posts = await postQuery.exec();
 
@@ -102,5 +102,38 @@ export async function fetchThreadById(id: string) {
         return thread;
     } catch(error: any) {
         throw new Error(`error fetching thread by id: ${error}`);
+    }
+}
+
+export async function addCommentToThread(
+    threadId: string,
+    commentText: string,
+    userId: string,
+    path: string
+) {
+    connectToDatabase();
+
+    try {
+        const originalThread = await Thread.findById(threadId);
+        if(!originalThread) {
+            throw new Error("thread not found");
+        }
+        
+        const commentThread = new Thread({
+            text: commentText,
+            author: userId,
+            parentId: threadId,
+        });
+
+        const savedCommentThread = await commentThread.save();
+
+        originalThread.children.push(savedCommentThread._id);
+
+        await originalThread.save();
+
+        revalidatePath(path);
+
+    } catch(error: any) {
+        throw new Error(`error adding comment to thread: ${error}`);
     }
 }
