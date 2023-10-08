@@ -17,7 +17,7 @@ export default async function Home() {
         {result.posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-2xl font-bold">No posts yet</h1>
-            <p className="text-gray-500">Be the first to post</p>
+            <p className="text-gray-500">Inga trådar hittades...<br/>Va den första som skickar en tråd!</p>
           </div>) : (
             <>
               {result.posts.map((post) => (
