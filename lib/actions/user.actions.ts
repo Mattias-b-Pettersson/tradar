@@ -5,6 +5,7 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDatabase } from "../mongoose";
 import { revalidatePath } from "next/cache";
+import { connect } from "http2";
 
 interface Params {
     userId: string;
@@ -141,5 +142,31 @@ export async function fetchUsers({
 
     } catch(error: any) {
         throw new Error(`Error fetching users: ${error.message}`);
+    }
+}
+
+export async function getActivity(userId:string) {
+    try {
+        connectToDatabase();
+
+        const userThreads = await Thread.find({ author: userId });
+        
+        const childThreadsIds = userThreads.reduce((acc, userThread) => {
+            return acc.concat(userThread.children)
+        }, []);
+
+        const replies = await Thread.find({ 
+            _id: { $in: childThreadsIds },
+            author: { $ne: userId } 
+        }).populate({
+            path: "author",
+            model: User,
+            select: "name image _id",    
+        });
+
+        return replies;
+
+    } catch(error: any) {
+        throw new Error(`Error fetching user activity: ${error.message}`);
     }
 }
